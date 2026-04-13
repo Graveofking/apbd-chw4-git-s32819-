@@ -8,8 +8,7 @@ namespace LegacyRenewalApp
         private readonly ISubscriptionPlanRepository _plans;
         private readonly IBillingGateway _billing;
         private readonly RenewalCalculator _calculator;
-
-        // Full constructor — used in tests and proper DI containers.
+        
         public SubscriptionRenewalService(
             ICustomerRepository customers,
             ISubscriptionPlanRepository plans,
@@ -21,9 +20,7 @@ namespace LegacyRenewalApp
             _plans      = plans;
             _calculator = calculator;
         }
-
-        // Parameterless constructor — preserves the public contract used by
-        // LegacyRenewalAppConsumer without requiring any change in client code.
+        
         public SubscriptionRenewalService()
             : this(
                 new CustomerRepository(),
@@ -31,8 +28,6 @@ namespace LegacyRenewalApp
                 new LegacyBillingGatewayAdapter(),
                 new RenewalCalculator())
         { }
-
-        // Public API — signature is identical to the original.
         public RenewalInvoice CreateRenewalInvoice(
             int customerId,
             string planCode,
@@ -66,11 +61,6 @@ namespace LegacyRenewalApp
 
             return invoice;
         }
-
-        // ----------------------------------------------------------------
-        // Private helpers
-        // ----------------------------------------------------------------
-
         private static void ValidateInputs(int customerId, string planCode, int seatCount, string paymentMethod)
         {
             if (customerId <= 0)              throw new ArgumentException("Customer id must be positive");
